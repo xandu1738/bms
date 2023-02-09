@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+SALE_TYPE = (('Deb', 'Debit'), ('Cre', 'Credit'))
+
 class Position(models.Model):
     position = models.CharField(max_length=100, unique=True)
     description = models.TextField()
@@ -38,6 +40,7 @@ class ProformaReceipt(models.Model):
     
 class CashReceipt(models.Model):
     date = models.DateTimeField(auto_now_add=True)
+    sale_type = models.CharField(max_length=8, choices=SALE_TYPE, default='Deb')
     quantity = models.IntegerField()
     item = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -46,7 +49,6 @@ class CashReceipt(models.Model):
         return self.name + " " + str(self.quantity)
     
 class GeneralReceipt(models.Model):
-    
     date = models.DateTimeField(auto_now_add=True)
     name = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -56,3 +58,4 @@ class GeneralReceipt(models.Model):
     
     def __str__(self):
         return self.name + " " + str(self.amount)
+    
