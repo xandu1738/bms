@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% load crispy_forms_tags %}
 
 <html>
   <head>
@@ -16,12 +16,56 @@
     />
   </head>
   <body>
-    {% block content %}
-    <form method="POST" action="">
-      {% csrf_token %} {{form.as_p}}
-      <button class="btn btn-sm bg-secondary" type="submit">submit</button>
-    </form>
+    {% block header %}
+    <div class="col card">
+      <h1 class="p-3">Position</h1>
+    </div>
+    {% endblock header %} {% block content %}
+    <div class="container py-5">
+      <div class="d-flex justify-content-center">
+        <div class="col-md-4 card p-4">
+          <form method="POST" action="">
+            {% csrf_token %} {{form|crispy}}
+            <button class="btn btn-sm bg-secondary" type="submit">
+              submit
+            </button>
+          </form>
+        </div>
+        <div class="col-md-8 card p-4 mx-3">
+          <table class="table table-striped">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Position</th>
+                <th scope="col">Description</th>
 
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for pos in positions %}
+
+              <tr>
+                <td>{{ pos.position }}</td>
+                <td>{{ pos.description }}</td>
+
+                <td>
+                  <div class="row">
+                    <h6>
+                      <a href="" class="badge badge-success mx-1">update</a>
+                    </h6>
+                    <h6>
+                      <a href="" class="badge badge-danger mx-1">delete</a>
+                    </h6>
+                  </div>
+                </td>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
     {% endblock content %}
 
     <script

@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 SALE_TYPE = (('Deb', 'Debit'), ('Cre', 'Credit'))
 
@@ -9,6 +10,10 @@ class Position(models.Model):
     
     def __str__(self):
         return self.position
+    
+    def get_absolute_url(self):
+        return reverse("position")
+    
 
 class Employee(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
@@ -17,6 +22,9 @@ class Employee(models.Model):
     
     def __str__(self):
         return self.user.username
+    
+    def get_absolute_url(self):
+        return reverse("employees")
 
 class InvoiceReceipt(models.Model):
     date = models.DateTimeField(auto_now_add=True)
@@ -27,7 +35,10 @@ class InvoiceReceipt(models.Model):
     received_by = models.CharField(max_length=255)
     
     def __str__(self):
-        return self.name + " " + str(self.quantity)
+        return self.received_by + " " + str(self.quantity)
+    
+    def get_absolute_url(self):
+        return reverse("add_invoice")
     
 class ProformaReceipt(models.Model):
     date = models.DateTimeField(auto_now_add=True)
@@ -36,7 +47,10 @@ class ProformaReceipt(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     
     def __str__(self):
-        return self.name + " " + str(self.quantity)
+        return self.item + " " + str(self.quantity)
+    
+    def get_absolute_url(self):
+        return reverse("add_proforma")
     
 class CashReceipt(models.Model):
     date = models.DateTimeField(auto_now_add=True)
@@ -46,7 +60,10 @@ class CashReceipt(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     
     def __str__(self):
-        return self.name + " " + str(self.quantity)
+        return self.item + " " + str(self.quantity)
+    
+    def get_absolute_url(self):
+        return reverse("add_cash")
     
 class GeneralReceipt(models.Model):
     date = models.DateTimeField(auto_now_add=True)
@@ -58,4 +75,7 @@ class GeneralReceipt(models.Model):
     
     def __str__(self):
         return self.name + " " + str(self.amount)
+    
+    def get_absolute_url(self):
+        return reverse("gen_receipt")
     
