@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-SALE_TYPE = (('Deb', 'Debit'), ('Cre', 'Credit'))
+SALE_TYPE = (('Debit', 'Debit'), ('Credit', 'Credit'))
 
 class Position(models.Model):
     position = models.CharField(max_length=100, unique=True)
@@ -58,9 +58,14 @@ class CashReceipt(models.Model):
     quantity = models.IntegerField()
     item = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    total = models.FloatField(default=0)
     
     def __str__(self):
         return self.item + " " + str(self.quantity)
+    
+    def save(self, *args, **kwargs):
+        self.total = self.quantity * self.price
+        super().save(*args, **kwargs)
     
     def get_absolute_url(self):
         return reverse("add_cash")

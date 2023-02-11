@@ -9,4 +9,6 @@ urlpatterns = [
     path('general_receipt/', views.add_gen, name='gen_receipt'),
     path('employees/', views.add_emp, name='employees'),
     path('position/', views.add_position, name='position'),
+    path('cash_stats/', views.cash_stats, name='cash_stats'),
 ]
+
