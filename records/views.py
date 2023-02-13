@@ -1,9 +1,17 @@
 from django.shortcuts import render
 from django.db.models import Sum, F
-# from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.views.generic import TemplateView
 from .models import *
 from .forms import CashReceiptForm, EmployeeForm, PositionForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm, PositionForm
-  
+
+class CashChartView(TemplateView):
+    template_name = 'records/cash_charts.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['qs'] = CashReceipt.objects.all()
+        return context
+
 def dashboard(request):
     context = {}
     return render(request, 'records/dashboard.html', context)

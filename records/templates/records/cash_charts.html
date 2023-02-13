@@ -19,16 +19,40 @@
     <div class="col card m-3">
       <h1 class="p-3">Cash Stats</h1>
     </div>
-    {% endblock header %}
-    {% block content %}
+    {% endblock header %} {% block scripts %}
+    <script>
+
+      const ctx = document.getElementById('myChart');
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [{% for data in qs %}{{data.quantity}},{% endfor %}],
+          datasets: [{
+            label: 'Price (UGX)',
+            data: [{% for data in qs %}{{data.price}},{% endfor %}],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+    {% endblock scripts %} {% block content %}
     <div class="container py-5">
       <div class="d-flex justify-content-center">
         <div class="col-md-6 card p-4">
           <div>
             <canvas id="myChart"></canvas>
-          </div>  
+          </div>
         </div>
-        {% comment %} <div class="col-md-6 card p-4 mx-3">
+        {% comment %}
+        <div class="col-md-6 card p-4 mx-3">
           <table class="table table-striped">
             <thead class="thead-dark">
               <tr>
@@ -42,7 +66,7 @@
             </thead>
             <tbody>
               {% for sale in sales %}
-              
+
               <tr>
                 <td>{{ sale.date|date:"Y-m-d" }}</td>
                 <td>{{ sale.quantity }}</td>
@@ -52,14 +76,10 @@
                 <td>
                   <div class="row">
                     <h6>
-                      <a href="" class="badge badge-success mx-1"
-                      >update</a
-                      >
+                      <a href="" class="badge badge-success mx-1">update</a>
                     </h6>
                     <h6>
-                      <a href="" class="badge badge-danger mx-1"
-                      >delete</a
-                      >
+                      <a href="" class="badge badge-danger mx-1">delete</a>
                     </h6>
                   </div>
                 </td>
@@ -68,34 +88,11 @@
               {% endfor %}
             </tbody>
           </table>
-        </div> {% endcomment %}
+        </div>
+        {% endcomment %}
       </div>
     </div>
     {% endblock content %}
-    
-    <script>
-
-      const ctx = document.getElementById('myChart');
-    
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: {{labels|safe}},
-          datasets: [{
-            label: 'Price (UGX)',
-            data: {{data|safe}},
-            borderWidth: 1
-          }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
 

@@ -17,7 +17,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="row">
+      {% comment %} <div class="row">
         <div class="col p-5 my-5">
           <div
             class="card text-white bg-secondary mb-3"
@@ -40,6 +40,7 @@
             </div>
           </div>
         </div>
+
         <div class="col p-5 my-5">
           <div
             class="card text-white bg-secondary mb-3"
@@ -51,6 +52,32 @@
             </div>
           </div>
         </div>
+      </div> {% endcomment %}
+      <div class="row">
+        <div class="col p-4 m-2 card">
+          <div class="row">
+            <a href="" class="btn btn-sm btn-secondary m-2">TXT</a>
+            <a href="" class="btn btn-sm btn-secondary m-2">CSV</a>
+            <a href="" class="btn btn-sm btn-secondary m-2">PDF</a>
+          </div>
+          Doughnut Graph
+        </div>
+        <div class="col p-4 m-2 card">
+          <div class="row">
+            <a href="" class="btn btn-sm btn-secondary m-2">TXT</a>
+            <a href="" class="btn btn-sm btn-secondary m-2">CSV</a>
+            <a href="" class="btn btn-sm btn-secondary m-2">PDF</a>
+          </div>
+          Line Graph
+        </div>
+      </div>
+      <div class="row p-4 m-2 card">
+        <div class="row">
+          <a href="" class="btn btn-sm btn-secondary m-2">TXT</a>
+          <a href="" class="btn btn-sm btn-secondary m-2">CSV</a>
+          <a href="" class="btn btn-sm btn-secondary m-2">PDF</a>
+        </div>
+        Bar Graph
       </div>
     </div>
     {% endblock content %}

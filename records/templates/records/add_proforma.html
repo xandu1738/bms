@@ -41,6 +41,7 @@
                 <th scope="col">Quantity</th>
                 <th scope="col">Item</th>
                 <th scope="col">Price</th>
+                <th scope="col">Total</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -49,9 +50,10 @@
 
               <tr>
                 <td>{{ prdt.date|date:"Y-m-d" }}</td>
-                <td>{{ prdt.quantity }}</td>
+                <td>{{ prdt.quantity }} {{ sale.unit }}</td>
                 <td>{{ prdt.item }}</td>
                 <td>{{ prdt.price }}</td>
+                <td>{{ prdt.total }}</td>
 
                 <td>
                   <div class="row">
