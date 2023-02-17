@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}GENERAL RECEIPT{% endblock title %}
+
+{% block header %}General Receipt{% endblock header %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 d-flex justify-content-center text-align-center">
+        {% for rec in object_list %}
+        <div class="card m-3 p-4">
+            <div class="card-body">
+                <h5 class="card-title">General Receipt</h5>
+                <p class="card-text">Received with thanks from <strong>{{rec.name}}</strong></p>
+                <p class="card-text">An amount of <strong>{{rec.amount}}</strong> Shillings only</p>
+                <p class="card-text">Being Payment for <strong>{{rec.reason}}</strong></p>
+                <p class="card-text">Cash or Cheque <strong>Cash</strong></p>
+                <p class="card-text">Date Issued <strong>{{rec.date}}</strong></p>
+                <p class="card-text">Received by <strong>{{rec.received_by}}</strong> Issued by: <strong>{{rec.issued_by}}</strong></p>
+                <p class="card-text">On <strong>20 Jan, 2023</strong></p>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

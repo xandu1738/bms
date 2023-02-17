@@ -51,45 +51,7 @@
             <canvas id="myChart"></canvas>
           </div>
         </div>
-        {% comment %}
-        <div class="col-md-6 card p-4 mx-3">
-          <table class="table table-striped">
-            <thead class="thead-dark">
-              <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Item</th>
-                <th scope="col">Sale Type</th>
-                <th scope="col">Price</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for sale in sales %}
-
-              <tr>
-                <td>{{ sale.date|date:"Y-m-d" }}</td>
-                <td>{{ sale.quantity }}</td>
-                <td>{{ sale.item }}</td>
-                <td>{{ sale.sale_type }}</td>
-                <td>{{ sale.price }}</td>
-                <td>
-                  <div class="row">
-                    <h6>
-                      <a href="" class="badge badge-success mx-1">update</a>
-                    </h6>
-                    <h6>
-                      <a href="" class="badge badge-danger mx-1">delete</a>
-                    </h6>
-                  </div>
-                </td>
-              </tr>
-
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% endcomment %}
+        
       </div>
     </div>
     {% endblock content %}
