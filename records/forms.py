@@ -1,5 +1,5 @@
 from django import forms
-from .models import GeneralReceipt, CashReceipt, InvoiceReceipt, ProformaReceipt, Position, Employee
+from .models import GeneralReceipt, CashReceipt, InvoiceReceipt, ProformaReceipt
 
 class GeneralReceiptForm(forms.ModelForm):
     class Meta:
@@ -21,12 +21,3 @@ class ProformaReceiptForm(forms.ModelForm):
         model = ProformaReceipt
         fields = ['quantity','unit','item','price']
         
-class PositionForm(forms.ModelForm):
-    class Meta:
-        model = Position
-        fields = '__all__'
-        
-class EmployeeForm(forms.ModelForm):
-    class Meta:
-        model = Employee
-        fields = '__all__'

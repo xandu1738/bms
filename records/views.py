@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.db.models import Sum, F
-from django.views.generic import TemplateView, DetailView
+from django.views.generic import TemplateView, DetailView, ListView 
 from .models import *
-from .forms import CashReceiptForm, EmployeeForm, PositionForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm, PositionForm
+from .forms import CashReceiptForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm
 from .exportto import sales_to_pdf, sales_to_txt
 class CashChartView(TemplateView):
     model = CashReceipt
@@ -12,13 +12,16 @@ class CashChartView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['qs'] = CashReceipt.objects.all()
         return context
-    
+
+def receipt_menu(request):
+    return render('records/receipts/receipt_menu.html')
+  
 def receipts(request):
-    return render(request, 'records/receipts_menu.html')
+    return render(request, 'records/receipts/receipts_menu.html')
 
 class General(DetailView):
     model = GeneralReceipt
-    template_name = 'records/general_receipt.html'
+    template_name = 'records/receipts/general_receipt.html'
 
 def dashboard(request):
     context = {}
@@ -36,7 +39,7 @@ def add_cash(request):
             form.save()
             
     context = {'form':form, 'sales':sales, 'debit':debit, 'credit':credit}
-    return render(request, 'records/add_cash.html', context)
+    return render(request, 'records/receipts/add_cash.html', context)
 
 def add_gen(request):
     sales = GeneralReceipt.objects.order_by('-date')[:7]
@@ -47,19 +50,7 @@ def add_gen(request):
             form.save()
             
     context = {'form':form, 'sales':sales}
-    return render(request, 'records/add_genreceipt.html', context)
-
-def add_emp(request):
-    form = EmployeeForm
-    emps = Employee.objects.order_by('user')[:7]
-    
-    if request.method == 'POST':
-        form = EmployeeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            
-    context = {'form':form, 'emps':emps}
-    return render(request, 'records/add_employee.html', context)
+    return render(request, 'records/receipts/add_genreceipt.html', context)
 
 def add_proforma(request):
     form = ProformaReceiptForm
@@ -71,7 +62,7 @@ def add_proforma(request):
             form.save()
             
     context = {'form':form, 'prdts':prdts}
-    return render(request, 'records/add_proforma.html', context)
+    return render(request, 'records/receipts/add_proforma.html', context)
 
 def add_invoice(request):
     form = InvoiceReceiptForm
@@ -82,29 +73,19 @@ def add_invoice(request):
             form.save()
             
     context = {'form':form, 'prdts':prdts}
-    return render(request, 'records/add_invoice.html', context)
-
-def add_position(request):
-    form = PositionForm    
-    positions = Position.objects.order_by('position')[:7]
-
-    if request.method == 'POST':
-        form = PositionForm(request.POST)
-        if form.is_valid():
-            form.save()
-    
-    context = {'form':form, 'positions':positions}
-    return render(request, 'records/new_position.html', context)
+    return render(request, 'records/receipts/add_invoice.html', context)
 
 def cash_stats(request):
-    labels = []
-    data = []
-    queryset = CashReceipt.objects.all()
+    cash = CashReceipt.objects.all()
+    # labels = []
+    # data = []
+    # queryset = CashReceipt.objects.all()
     
-    for sale in queryset:
-        labels.append(sale.item)
-        data.append(sale.price)
-    context = {'labels':labels, 'data':data}
+    # for sale in queryset:
+    #     labels.append(sale.item)
+    #     data.append(sale.price)
+    # context = {'labels':labels, 'data':data}
+    context = {'cash':cash}
     return render(request, 'records/cash_charts.html', context)
 
 def sales_txt(request):

@@ -11,9 +11,7 @@ urlpatterns = [
     path('proforma_receipt/', views.add_proforma, name='add_proforma'),
     path('general_receipt/', views.add_gen, name='gen_receipt'),
     path('general_receipt/<int:pk>', General.as_view(), name='gen_receipt'),
-    path('employees/', views.add_emp, name='employees'),
-    path('position/', views.add_position, name='position'),
-    path('cash_stats/', CashChartView.as_view(), name='cash_stats'),
+    path('cash_stats/', views.cash_stats, name='cash_stats'),
     path('receipts/', views.receipts, name='receipts'),
 ]
 

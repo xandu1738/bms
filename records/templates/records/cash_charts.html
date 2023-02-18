@@ -27,10 +27,12 @@
       new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: [{% for data in qs %}{{data.quantity}},{% endfor %}],
+          labels: [{% for data in cash %}'{{data.item}}',{% endfor %}],
           datasets: [{
             label: 'Price (UGX)',
-            data: [{% for data in qs %}{{data.price}},{% endfor %}],
+            data: [{% for data in cash %}{{data.price}},{% endfor %}],
+            backgroundColor: ['rgba(255,99,132,1)',
+            'rgba(55,90,120,1)','rgba(5,99,132,1)','rgba(255,99,2,1)',]
             borderWidth: 1
           }]
         },

@@ -1,8 +1,6 @@
 from django.contrib import admin
-from .models import Position, ProformaReceipt, InvoiceReceipt, CashReceipt, GeneralReceipt, Employee
+from .models import ProformaReceipt, InvoiceReceipt, CashReceipt, GeneralReceipt
 
-admin.site.register(Position)
-admin.site.register(Employee)
 admin.site.register(CashReceipt)
 admin.site.register(InvoiceReceipt)
 admin.site.register(ProformaReceipt)
