@@ -3,7 +3,7 @@ from . import views
 from .views import CashChartView, General
 
 urlpatterns = [
-    path('', views.templatedef),
+    path('', views.welcome, name='welcome'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('sales_to_txt', views.sales_txt, name='sales_to_txt'),
     path('sales_to_pdf', views.sales_pdf, name='sales_to_pdf'),    

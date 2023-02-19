@@ -4,6 +4,7 @@ from django.views.generic import TemplateView, DetailView, ListView
 from .models import *
 from .forms import CashReceiptForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm
 from .exportto import sales_to_pdf, sales_to_txt
+from management.models import Employee
 
 from io import BytesIO
 from django.http import FileResponse, HttpResponse
@@ -31,7 +32,8 @@ class General(DetailView):
 
 def dashboard(request):
     cash = CashReceipt.objects.all()
-    context = {'cash': cash}
+    employees = Employee.objects.all()
+    context = {'cash': cash, 'employees': employees}
     return render(request, 'records/dashboard.html', context)
 
 def add_cash(request):
@@ -131,3 +133,6 @@ def sales_pdf(request):
 
 def templatedef(request):
     return render(request, 'default.html')
+
+def welcome(request):
+    return render(request, 'welcome.html')
