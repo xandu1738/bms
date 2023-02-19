@@ -12,7 +12,10 @@
     <table class="table table-striped">
       <thead class="thead-dark">
         <tr>
-          <th scope="col">User</th>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+          <th scope="col">Username</th>
+          <th scope="col">Email</th>
           <th scope="col">Position</th>
           <th scope="col">Action</th>
         </tr>
@@ -20,7 +23,10 @@
       <tbody>
         {% for emp in employees %}
         <tr>
-          <td>{{ emp.user }}</td>
+            <td>{{ emp.user.first_name }}</td>
+            <td>{{ emp.user.last_name }}</td>
+            <td>{{ emp.user }}</td>
+            <td>{{ emp.user.email }}</td>
           <td>{{ emp.position }}</td>
           <td>
             <div class="row">

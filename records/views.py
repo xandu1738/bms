@@ -4,9 +4,15 @@ from django.views.generic import TemplateView, DetailView, ListView
 from .models import *
 from .forms import CashReceiptForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm
 from .exportto import sales_to_pdf, sales_to_txt
+
+from io import BytesIO
+from django.http import FileResponse, HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.units import inch
 class CashChartView(TemplateView):
     model = CashReceipt
-    template_name = 'records/cash_charts.html'
+    template_name = 'records/receipts/cash_charts.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -14,7 +20,7 @@ class CashChartView(TemplateView):
         return context
 
 def receipt_menu(request):
-    return render('records/receipts/receipt_menu.html')
+    return render(request, 'records/receipts/receipt_menu.html')
   
 def receipts(request):
     return render(request, 'records/receipts/receipts_menu.html')
@@ -24,7 +30,8 @@ class General(DetailView):
     template_name = 'records/receipts/general_receipt.html'
 
 def dashboard(request):
-    context = {}
+    cash = CashReceipt.objects.all()
+    context = {'cash': cash}
     return render(request, 'records/dashboard.html', context)
 
 def add_cash(request):
@@ -75,21 +82,52 @@ def add_invoice(request):
     context = {'form':form, 'prdts':prdts}
     return render(request, 'records/receipts/add_invoice.html', context)
 
+
 def cash_stats(request):
-    cash = CashReceipt.objects.all()
-    # labels = []
-    # data = []
-    # queryset = CashReceipt.objects.all()
+    labels = []
+    data = []
+    queryset = CashReceipt.objects.all()
     
-    # for sale in queryset:
-    #     labels.append(sale.item)
-    #     data.append(sale.price)
-    # context = {'labels':labels, 'data':data}
-    context = {'cash':cash}
+    for sale in queryset:
+        labels.append(sale.item)
+        data.append(sale.price)
+    context = {'labels':labels, 'data':data}
     return render(request, 'records/cash_charts.html', context)
 
 def sales_txt(request):
     return sales_to_txt(CashReceipt)
 
 def sales_pdf(request):
-    return sales_to_pdf(CashReceipt)
+    buf = BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    
+    textOb = c.beginText()
+    textOb.setTextOrigin(inch, inch)
+    textOb.setFont("Helvetica", 12)
+    
+    sales = CashReceipt.objects.all()
+    
+    lines = []
+    
+    for sale in sales:
+        lines.append(sale.date)
+        lines.append(sale.sale_type)
+        lines.append(sale.quantity)
+        lines.append(sale.unit)
+        lines.append(sale.item)
+        lines.append(sale.price)
+        lines.append(sale.total)
+        lines.append(" ")
+    
+    for line in lines:
+        textOb.textLine(line)
+    
+    c.drawText(textOb)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+    
+    return FileResponse(buf, as_attachment=True, filename='sales.pdf')
+
+def templatedef(request):
+    return render(request, 'default.html')
