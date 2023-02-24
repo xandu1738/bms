@@ -84,7 +84,6 @@ def add_invoice(request):
     context = {'form':form, 'prdts':prdts}
     return render(request, 'records/receipts/add_invoice.html', context)
 
-
 def cash_stats(request):
     labels = []
     data = []
