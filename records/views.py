@@ -5,12 +5,16 @@ from .models import *
 from .forms import CashReceiptForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm
 from .exportto import sales_to_pdf, sales_to_txt
 from management.models import Employee
+from datetime import datetime
+from django.template.defaultfilters import floatformat
 
 from io import BytesIO
 from django.http import FileResponse, HttpResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.units import inch
+
+import numpy as np
 class CashChartView(TemplateView):
     model = CashReceipt
     template_name = 'records/receipts/cash_charts.html'
@@ -19,9 +23,6 @@ class CashChartView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['qs'] = CashReceipt.objects.all()
         return context
-
-def receipt_menu(request):
-    return render(request, 'records/receipts/receipt_menu.html')
   
 def receipts(request):
     return render(request, 'records/receipts/receipts_menu.html')
@@ -31,9 +32,30 @@ class General(DetailView):
     template_name = 'records/receipts/general_receipt.html'
 
 def dashboard(request):
+    
+    day = datetime.today()
+    
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    
+    this_month = np.array(CashReceipt.objects.filter(date__month=current_month, date__year=current_year).values_list('total', flat=True))
+    ns = np.sum(this_month)
+    np_sum = floatformat(ns, 2)
+    
+    curr_month = CashReceipt.objects.filter(date__month=current_month, date__year=current_year)
+    
+    specific_month = 2  # February
+    specific_year = 2023
+    
+    spec_month = CashReceipt.objects.filter(date__month=specific_month, date__year=specific_year)
+    
+    day_bal = np.array(CashReceipt.objects.filter(date__year=day.year, date__month=day.month, date__day=day.day).values_list('total', flat=True))
+    tb = np.sum(day_bal)
+    today_bal = floatformat(tb, 2)
+    
     cash = CashReceipt.objects.all()
     employees = Employee.objects.all()
-    context = {'cash': cash, 'employees': employees}
+    context = {'cash': cash, 'np_sum':np_sum,'today_bal':today_bal , 'employees': employees,'curr_month': curr_month, 'spec_month': spec_month}
     return render(request, 'records/dashboard.html', context)
 
 def add_cash(request):

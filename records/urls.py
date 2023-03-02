@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import CashChartView, General
+from .views import General
 
 urlpatterns = [
     path('', views.welcome, name='welcome'),
@@ -13,6 +13,5 @@ urlpatterns = [
     path('general_receipt/', views.add_gen, name='gen_receipt'),
     path('general_receipt/<int:pk>', General.as_view(), name='gen_receipt'),
     path('cash_stats/', views.cash_stats, name='cash_stats'),
-    path('receipts/', views.receipts, name='receipts'),
 ]
 
