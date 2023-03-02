@@ -1,15 +1,27 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
+from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.views.generic import TemplateView
-from .forms import EmployeeForm, PositionForm
+from .forms import EmployeeForm, PositionForm, SignUpForm
 from .models import Employee, Position
 
+class PasswordsChangeView(PasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('login')
 class UserRegistration(CreateView):
-    form_class = UserCreationForm
+    form_class = SignUpForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('login')
+    
+class UserEditView(UpdateView):
+    form_class = UserChangeForm
+    template_name = 'registration/edit_profile.html'
+    success_url = reverse_lazy('dashboard')
+    
+    def get_object(self):
+        return self.request.user
 
 def emps(request):
     employees = Employee.objects.all()

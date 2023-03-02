@@ -3,35 +3,43 @@
   <h1 class="p-3">Employees</h1>
 </div>
 {% endblock header %} {% block content %}
-<div class="d-flex mx-auto justify-content-center">
-  <div class="col-md-12 col-lg-6 mx-auto p-4 mx-2">
-    {% for emp in employees %}
-    <div class="col-md-12 col-lg-6 mx-auto card m-2">
-      <div class="card-body">
-        <div class="row px-1">
-          <div class="col-sm-12 col-md-12">
-            <img
-              src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZSUyMHBpY3R1cmUlMjA2eDZ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-              class="img-fluid rounded-circle"
-              alt="Profile Image"
-            />
-          </div>
-          <div class="col-sm-12 col-md-8 pt-3">
-            <h5 class="card-title">
-              {{ emp.user.first_name }} {{ emp.user.last_name }}
-            </h5>
-            <p class="card-text">
-              <strong>Email:</strong> {{ emp.user.email }}
-            </p>
-            <p class="card-text">
-              <strong>Position:</strong> {{ emp.position }}
-            </p>
-            <a href="#" class="btn btn-primary">Edit Profile</a>
-          </div>
-        </div>
-      </div>
+
+<style>
+  img {
+    width: 40%;
+    border-radius: 50%;
+    margin: 0 auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  .card {
+    padding: 1.5em 0.5em 0.5em;
+    border-radius: 2em;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+  .card-title {
+    font-weight: 700;
+    font-size: 1.5em;
+  }
+</style>
+
+<div class="row justify-content-center">
+  {% for emp in employees %}
+  <div class="card m-2" style="width: 18rem">
+    <img
+      src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZSUyMHBpY3R1cmUlMjA2eDZ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+      class="card-img-top"
+      alt="..."
+    />
+    <div class="card-body">
+      <h5 class="card-title">{{ emp.user.username }}</h5>
+      <p class="card-text">
+        {{emp.position}}
+      </p>
+      <a href="{% url 'profile_edit' %}" class="btn btn-primary">Detail</a>
     </div>
-    {% endfor %}
   </div>
+  {% endfor %}
 </div>
+
 {% endblock content %}
