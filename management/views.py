@@ -1,8 +1,9 @@
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.forms import UserChangeForm, PasswordChangeForm
 from django.contrib.auth.views import PasswordChangeView
+from django.contrib import messages
 from django.urls import reverse_lazy
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from .forms import EmployeeForm, PositionForm, SignUpForm
 from .models import Employee, Position
@@ -36,7 +37,9 @@ def add_emp(request):
         form = EmployeeForm(request.POST)
         if form.is_valid():
             form.save()
-            
+        messages.success(request, ('Employee added successfully'))
+        messages.success(request, ('Position added successfully'))
+        return redirect('add_employees')
     context = {'form':form, 'emps':emps}
     return render(request, 'employees/add_employee.html', context)
 
@@ -48,6 +51,8 @@ def add_position(request):
         form = PositionForm(request.POST)
         if form.is_valid():
             form.save()
+        messages.success(request, ('Position added successfully'))
+        return redirect('position')
     
     context = {'form':form, 'positions':positions}
     return render(request, 'employees/new_position.html', context)

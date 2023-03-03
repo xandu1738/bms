@@ -7,7 +7,7 @@ from .exportto import sales_to_pdf, sales_to_txt
 from management.models import Employee
 from datetime import datetime
 from django.template.defaultfilters import floatformat
-
+from django.contrib import messages
 from io import BytesIO
 from django.http import FileResponse, HttpResponse
 from reportlab.pdfgen import canvas
@@ -68,6 +68,8 @@ def add_cash(request):
         form = CashReceiptForm(request.POST)
         if form.is_valid():
             form.save()
+        messages.success(request, ('Cash Receipt added successfully'))
+            
             
     context = {'form':form, 'sales':sales, 'debit':debit, 'credit':credit}
     return render(request, 'records/receipts/add_cash.html', context)
@@ -79,6 +81,7 @@ def add_gen(request):
         form = GeneralReceiptForm(request.POST)
         if form.is_valid():
             form.save()
+        messages.success(request, ('General Receipt added successfully'))
             
     context = {'form':form, 'sales':sales}
     return render(request, 'records/receipts/add_genreceipt.html', context)
@@ -91,6 +94,7 @@ def add_proforma(request):
         form = ProformaReceiptForm(request.POST)
         if form.is_valid():
             form.save()
+        messages.success(request, ('Proforma added successfully'))
             
     context = {'form':form, 'prdts':prdts}
     return render(request, 'records/receipts/add_proforma.html', context)
@@ -102,6 +106,7 @@ def add_invoice(request):
         form = InvoiceReceiptForm(request.POST)
         if form.is_valid():
             form.save()
+        messages.success(request, ('Invoice added successfully'))
             
     context = {'form':form, 'prdts':prdts}
     return render(request, 'records/receipts/add_invoice.html', context)
