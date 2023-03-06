@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container card p-3">
+    <div class="row">
+      <div class="col-sm-12">
+        <h1 class="text-center">Cash Sale</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6">
+        <p><strong>Date:</strong>{{cash_r.date}}</p>
+        <p><strong>Receipt #: </strong> {{cash_r.id}}</p>
+      </div>
+      <div class="col-sm-6">
+        <p><strong>Sale Type:</strong>{{cash_r.sale_type}}</p>
+        {% comment %} <p><strong>Payment Method:</strong> Credit Card</p> {% endcomment %}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{cash_r.item}}</td>
+              <td>Shs. {{cash_r.price}}</td>
+              <td>{{cash_r.quantity}} {{cash_r.unit}}</td>
+              <td>Shs. {{cash_r.total}}</td>
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <p class="text-right"><strong>Subtotal:</strong> {{cash_r.total}}</p>
+        <p class="text-right"><strong>Tax:</strong> 0.00</p>
+        <hr>
+        <h3 class="text-right">Amount Payable: Shs. {{cash_r.total}}</h3>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

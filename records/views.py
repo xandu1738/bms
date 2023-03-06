@@ -189,3 +189,8 @@ def welcome(request):
             
     context = {'form':form}
     return render(request, 'welcome.html', context)
+
+def cash_detail(request, pk):
+    cash_r = CashReceipt.objects.get(id=pk)
+    context = {'cash_r':cash_r}
+    return render(request, 'records/receipts/details/cash_details.html', context)
