@@ -13,5 +13,6 @@ urlpatterns = [
     path('general_receipt/', views.add_gen, name='gen_receipt'),
     path('general_receipt/<int:pk>', General.as_view(), name='gen_receipt'),
     path('cash_stats/', views.cash_stats, name='cash_stats'),
+    path('sendit', views.welcome, name="send"),
 ]
 

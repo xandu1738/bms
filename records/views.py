@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Sum, F
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
 from django.views.generic import TemplateView, DetailView, ListView 
 from .models import *
-from .forms import CashReceiptForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm
+from .forms import CashReceiptForm, ContactForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm
 from .exportto import sales_to_pdf, sales_to_txt
 from management.models import Employee
 from datetime import datetime
@@ -161,4 +164,28 @@ def templatedef(request):
     return render(request, 'default.html')
 
 def welcome(request):
-    return render(request, 'welcome.html')
+    form = ContactForm()
+    
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            
+            em_context = {'name':name, 'email':email, 'message':message}
+            html = render_to_string('email_template.html', em_context)
+            
+            send_mail(
+                'Customer Contact Form',
+                f'Name: {name}\nEmail: {email}\nMessage {message}\n',
+                settings.DEFAULT_FROM_EMAIL,
+                ['settings.EMAIL_HOST_USER'],
+                html_message=html,
+                fail_silently=False,
+            )
+            messages.success(request,('Email Submitted'))
+            return redirect('welcome')
+            
+    context = {'form':form}
+    return render(request, 'welcome.html', context)
