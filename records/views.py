@@ -103,7 +103,7 @@ def add_proforma(request):
     return render(request, 'records/receipts/add_proforma.html', context)
 
 def add_invoice(request):
-    form = InvoiceReceiptForm
+    form = InvoiceReceiptForm()
     prdts = InvoiceReceipt.objects.order_by('-date')[:7]
     if request.method == 'POST':
         form = InvoiceReceiptForm(request.POST)
@@ -190,7 +190,75 @@ def welcome(request):
     context = {'form':form}
     return render(request, 'welcome.html', context)
 
-def cash_detail(request, pk):
-    cash_r = CashReceipt.objects.get(id=pk)
-    context = {'cash_r':cash_r}
-    return render(request, 'records/receipts/details/cash_details.html', context)
+def cash_update(request, pk):
+    c = CashReceipt.objects.get(id=pk)
+    form = CashReceiptForm(instance=c)
+    if request.method == 'POST':
+        form = CashReceiptForm(request.POST, instance=c)
+        if form.is_valid():
+            form.save()
+        messages.success(request,(f'Element {pk} updated successfully'))
+        return redirect('add_cash')
+    context = {'form':form}
+    return render(request, 'records/receipts/update/cash_edit.html', context)
+
+def invoice_update(request, pk):
+    c = InvoiceReceipt.objects.get(id=pk)
+    form = InvoiceReceiptForm(instance=c)
+    if request.method == 'POST':
+        form = InvoiceReceiptForm(request.POST,instance=c)
+        if form.is_valid():
+            form.save()
+        messages.success(request,(f'Element {pk} updated successfully'))   
+        return redirect('add_invoice')
+    context = {'form':form}
+    return render(request, 'records/receipts/update/invoice_edit.html', context)
+
+def proforma_update(request, pk):
+    p = ProformaReceipt.objects.get(id=pk)
+    form = ProformaReceiptForm(instance=p)
+    if request.method == 'POST':
+        form = ProformaReceiptForm(request.POST, instance=p)
+        if form.is_valid():
+            form.save()
+        messages.success(request,(f'Element {pk} updated successfully'))
+        return redirect('add_proforma')
+    context = {'form':form}
+    return render(request, 'records/receipts/update/proforma_edit.html', context)
+
+
+def gr_update(request,pk):
+    g = GeneralReceipt.objects.get(id=pk)
+    form = GeneralReceiptForm(instance=g)
+    if request.method == 'POST':
+        form = GeneralReceiptForm(request.POST, instance=g)
+        if form.is_valid():
+            form.save()
+        messages.success(request, (f'Element {pk} updated successfully'))
+        return redirect('gen_receipt')
+    context ={'form':form}
+    return render(request, 'records/receipts/update/gr_update.html', context)
+
+def delete_cash(request, pk):
+    c = CashReceipt.objects.get(id=pk)
+    c.delete()
+    messages.success(request,(f'Element {pk} deleted successfully'))
+    return redirect('add_cash')
+
+def delete_invoice(request, pk):
+    c = InvoiceReceipt.objects.get(id=pk)
+    c.delete()
+    messages.success(request,(f'Element {pk} deleted successfully'))
+    return redirect('add_invoice')
+
+def delete_proforma(request, pk):
+    c = ProformaReceipt.objects.get(id=pk)
+    c.delete()
+    messages.success(request,(f'Element {pk} deleted successfully'))
+    return redirect('add_proforma')
+
+def delete_gr(request, pk):
+    c = GeneralReceipt.objects.get(id=pk)
+    c.delete()
+    messages.success(request,(f'Element {pk} deleted successfully'))
+    return redirect('gen_receipt')

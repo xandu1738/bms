@@ -36,10 +36,10 @@
         <td>
           <div class="row">
             <h6>
-              <a href="{% url 'cash_detail' sale.id %}" class="badge badge-success mx-1">update</a>
+              <a href="{% url 'cash_update' sale.id %}" class="badge badge-success mx-1">update</a>
             </h6>
             <h6>
-              <a href="" class="badge badge-danger mx-1">delete</a>
+              <a href="{% url 'del_cash' sale.id %}" class="badge badge-danger mx-1">delete</a>
             </h6>
           </div>
         </td>

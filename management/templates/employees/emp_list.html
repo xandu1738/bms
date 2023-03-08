@@ -27,7 +27,7 @@
   {% for emp in employees %}
   <div class="card m-2" style="width: 18rem">
     <img
-      src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZSUyMHBpY3R1cmUlMjA2eDZ8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+      src="{{ emp.photo.url }}"
       class="card-img-top"
       alt="..."
     />
