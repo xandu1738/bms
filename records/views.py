@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Sum, F
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
 from django.views.generic import TemplateView, DetailView, ListView 
 from .models import *
-from .forms import CashReceiptForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm
+from .forms import CashReceiptForm, ContactForm, InvoiceReceiptForm, GeneralReceiptForm, ProformaReceiptForm
 from .exportto import sales_to_pdf, sales_to_txt
 from management.models import Employee
 from datetime import datetime
@@ -100,7 +103,7 @@ def add_proforma(request):
     return render(request, 'records/receipts/add_proforma.html', context)
 
 def add_invoice(request):
-    form = InvoiceReceiptForm
+    form = InvoiceReceiptForm()
     prdts = InvoiceReceipt.objects.order_by('-date')[:7]
     if request.method == 'POST':
         form = InvoiceReceiptForm(request.POST)
@@ -161,4 +164,101 @@ def templatedef(request):
     return render(request, 'default.html')
 
 def welcome(request):
-    return render(request, 'welcome.html')
+    form = ContactForm()
+    
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+            
+            em_context = {'name':name, 'email':email, 'message':message}
+            html = render_to_string('email_template.html', em_context)
+            
+            send_mail(
+                'Customer Contact Form',
+                f'Name: {name}\nEmail: {email}\nMessage {message}\n',
+                settings.DEFAULT_FROM_EMAIL,
+                ['settings.EMAIL_HOST_USER'],
+                html_message=html,
+                fail_silently=False,
+            )
+            messages.success(request,('Email Submitted'))
+            return redirect('welcome')
+            
+    context = {'form':form}
+    return render(request, 'welcome.html', context)
+
+def cash_update(request, pk):
+    c = CashReceipt.objects.get(id=pk)
+    form = CashReceiptForm(instance=c)
+    if request.method == 'POST':
+        form = CashReceiptForm(request.POST, instance=c)
+        if form.is_valid():
+            form.save()
+        messages.success(request,(f'Element {pk} updated successfully'))
+        return redirect('add_cash')
+    context = {'form':form}
+    return render(request, 'records/receipts/update/cash_edit.html', context)
+
+def invoice_update(request, pk):
+    c = InvoiceReceipt.objects.get(id=pk)
+    form = InvoiceReceiptForm(instance=c)
+    if request.method == 'POST':
+        form = InvoiceReceiptForm(request.POST,instance=c)
+        if form.is_valid():
+            form.save()
+        messages.success(request,(f'Element {pk} updated successfully'))   
+        return redirect('add_invoice')
+    context = {'form':form}
+    return render(request, 'records/receipts/update/invoice_edit.html', context)
+
+def proforma_update(request, pk):
+    p = ProformaReceipt.objects.get(id=pk)
+    form = ProformaReceiptForm(instance=p)
+    if request.method == 'POST':
+        form = ProformaReceiptForm(request.POST, instance=p)
+        if form.is_valid():
+            form.save()
+        messages.success(request,(f'Element {pk} updated successfully'))
+        return redirect('add_proforma')
+    context = {'form':form}
+    return render(request, 'records/receipts/update/proforma_edit.html', context)
+
+
+def gr_update(request,pk):
+    g = GeneralReceipt.objects.get(id=pk)
+    form = GeneralReceiptForm(instance=g)
+    if request.method == 'POST':
+        form = GeneralReceiptForm(request.POST, instance=g)
+        if form.is_valid():
+            form.save()
+        messages.success(request, (f'Element {pk} updated successfully'))
+        return redirect('gen_receipt')
+    context ={'form':form}
+    return render(request, 'records/receipts/update/gr_update.html', context)
+
+def delete_cash(request, pk):
+    c = CashReceipt.objects.get(id=pk)
+    c.delete()
+    messages.success(request,(f'Element {pk} deleted successfully'))
+    return redirect('add_cash')
+
+def delete_invoice(request, pk):
+    c = InvoiceReceipt.objects.get(id=pk)
+    c.delete()
+    messages.success(request,(f'Element {pk} deleted successfully'))
+    return redirect('add_invoice')
+
+def delete_proforma(request, pk):
+    c = ProformaReceipt.objects.get(id=pk)
+    c.delete()
+    messages.success(request,(f'Element {pk} deleted successfully'))
+    return redirect('add_proforma')
+
+def delete_gr(request, pk):
+    c = GeneralReceipt.objects.get(id=pk)
+    c.delete()
+    messages.success(request,(f'Element {pk} deleted successfully'))
+    return redirect('gen_receipt')

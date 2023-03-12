@@ -15,7 +15,10 @@ class Position(models.Model):
 class Employee(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
-    #profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
+    photo = models.ImageField(upload_to='images/profile_pics/', blank=True, null=True)
+    facebook = models.CharField(null=True, blank=True, max_length=255)
+    twitter = models.CharField(null=True, blank=True, max_length=255)
+    linkedin = models.CharField(null=True, blank=True, max_length=255)
     
     def __str__(self):
         return self.user.username

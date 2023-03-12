@@ -35,12 +35,12 @@
         <td>
           <div class="row">
             <h6>
-              <a href="" class="badge badge-success mx-1"
+              <a href="{% url 'proforma_update' prdt.id %}" class="badge badge-success mx-1"
                 >update</a
               >
             </h6>
             <h6>
-              <a href="" class="badge badge-danger mx-1"
+              <a href="{% url 'del_proforma ' prdt.id %}" class="badge badge-danger mx-1"
                 >delete</a
               >
             </h6>
