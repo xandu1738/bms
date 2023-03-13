@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from records.models import CashReceipt, ProformaReceipt, InvoiceReceipt, GeneralReceipt
 from management.models import Position, Employee
 
@@ -29,4 +30,9 @@ class PositionSerializer(serializers.ModelSerializer):
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
+        fields = '__all__'
+        
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
         fields = '__all__'
